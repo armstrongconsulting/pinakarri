@@ -1,0 +1,68 @@
+<!doctype html>
+<html>
+  <head>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Roboto:500,300,700,400" rel="stylesheet" type="text/css">
+    <link href="css/main.css" rel="stylesheet" />
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.17/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.17/angular-resource.min.js"></script>
+  </head>
+  <body ng-app="pinakarriApp">
+    
+    <div class="jumbotron" ng-controller="UnitController">
+    	 <div class="container"> 
+  		<h1>Pinakarri RaRo Offsite Activities</h1>
+  		<p>{{ unit.name }} ({{ unit.identifier }})</p>
+  		</div>
+	</div>
+
+    <div class="main" ng-controller="SubscriptionController">
+      <div class="container">  
+          
+      	  <div class="table-responsive"> 
+      	  <table class="table table-hover">
+      	  <thead>
+      	  <tr><th>Id</th><th>Name</th><th>Ranger / Rovers</th><th>Leaders</th></tr>
+      	  </thead>
+	      <tbody ng-repeat="activity in activities"> 
+		    <tr> 
+	  		    <td>{{ activity.identifier }}</td> 
+			    <td><a href="{{activity.details}}" target="{{activity.identifier}}">{{ activity.name}}</a></td>
+			    <td>
+			    	<div><b>{{ activity.available_raro}}</b> seat(s) available, You have already booked <b>{{ activity.booked_raro}}</b> seat(s)</div>
+			    	<hr/>
+			    	<span ng-repeat="i in [1, 2, 3] track by $index">
+			    			<button ng-show="activity.booked_raro >= i" type="button" class="btn btn-success book-button"  title="Click to un-book your seat" data-toggle="tooltip" ng-click="unsubscribe(activity.identifier)">Unbook</button>
+			    			<button ng-show="activity.enabled && activity.booked_raro < i && activity.available_raro >= i" type="button" class="btn btn-primary book-button"  title="Click to book your seat" data-toggle="tooltip" ng-click="subscribe(activity.identifier)">Book</button>
+			    			<button ng-show="activity.enabled && activity.booked_raro < i && activity.available_raro < i" type="button" class="btn btn-danger disabled book-button"  title="Activity is booked-up" data-toggle="tooltip">n/a</button>
+			    	</span>
+			    </td> 
+			    <td><div>
+			    	<div>{{ activity.available_leaders}} seat(s) available</div>
+			   		<hr/>
+			    	<div>
+			    	<button type="button" class="btn btn-primary book-button" title="Click to book a leader's seat" data-toggle="tooltip">Book</button>
+			    	</div>
+			    </div></td> 
+			</tr> 
+		  </tbody>
+		  </table>
+		  </div>
+      </div>
+    </div>
+
+
+    <!-- Modules -->
+    <script src="js/app.js"></script>
+ 
+    <!-- Controllers -->
+    <script src="js/controllers/SubscriptionController.js"></script>
+    <script src="js/controllers/UnitController.js"></script>
+    
+
+    
+  </body>
+</html>

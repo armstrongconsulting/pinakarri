@@ -1,0 +1,13 @@
+{
+  "name": "pinakarri_raro_app",
+  "version": "1.0.0",
+  "description": "Pinakarri RaRo Offsite Subscription App",
+  "author": "Christoph Schachinger <christoph@armstrongconsulting.net>",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.13.3" 
+  }
+}

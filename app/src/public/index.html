@@ -1,0 +1,63 @@
+<!doctype html>
+<html>
+  <head>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Roboto:500,300,700,400" rel="stylesheet" type="text/css">
+    <link href="css/main.css" rel="stylesheet" />
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+  </head>
+  <body >
+    
+    <div class="jumbotron">
+       <div class="container"> 
+          <h1>Pinakarri RaRo Offsite Activities</h1>
+          <p><span id="unit_name"></span> (<span id="unit_identifier"></span>)</p>
+      </div>
+    </div>
+
+    <div class="main">
+      <div class="container">
+          <div class="table-responsive"> 
+            <table class="table table-hover">
+              <thead>
+                <tr><th>Id</th><th>Name</th><th>Ranger / Rovers</th><th>Leaders</th></tr>
+              </thead>
+              <tbody> 
+                <tr id="row_template">
+                  <td><a href="{external_link}" target="Offsite_{identifier}">{identifier}</a></td>
+                  <td>{name}</td>
+                  <td>
+                      <div>
+                        <b>{participants.available}</b> seat(s) available, You have already booked <b>{participants.booked}</b> seat(s)
+                      </div>
+                      <hr/>
+                      <button t="participant" n="1" activity="{identifier}" type="button" class="btn book-button"  title="title">Action</button>
+                      <button t="participant" n="2" activity="{identifier}" type="button" class="btn book-button"  title="title">Action</button>
+                      <button t="participant" n="3" activity="{identifier}" type="button" class="btn book-button"  title="title">Action</button>
+                  </td>
+                  <td>
+                      <div>
+                        <b>{leaders.available}</b> seat(s) available, You have already booked <b>{leaders.booked}</b> seat(s)
+                      </div>
+                      <hr/>
+                      <button t="leader" n="1" activity="{identifier}"  type="button" class="btn book-button"  title="title">Action</button>
+                  </td>
+                </tr>
+          
+              </tbody>
+            </table>
+          </div>
+      </div>
+    </div>
+
+
+  </body>
+
+     <!-- Modules -->
+    <script src="js/app.js"></script>
+    <script src="js/nano.js"></script>
+
+</html>

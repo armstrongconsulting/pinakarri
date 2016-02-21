@@ -8,6 +8,10 @@
     "start": "node server.js"
   },
   "dependencies": {
-    "express": "^4.13.3" 
-  }
+    "express": "^4.13.3",
+    "mongodb": "~2.1.0",
+    "node-xlsx": "^0.6.0",
+    "express-csv": "^0.6.0",
+    "co": "^4.0.0"
+}
 }

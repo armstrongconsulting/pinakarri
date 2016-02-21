@@ -1,9 +1,10 @@
 app.controller("SubscriptionController", function($scope, Subscriptions) {
   
   
-  Subscriptions.query(function(data) {
-    $scope.activities = data;
-  });
+ $.getJSON("api/unit/" + getUrlParameter('uid') + "/subscriptions",function(subscriptions){
+		$scope.subscriptions = subscriptions;
+	});
+
  
   
   $scope.subscribe = function(oa){

@@ -1,56 +1,17 @@
+var app = angular.module("pinakarriApp",[]);
 
-$(document).ready(function(){
-
-	$.getJSON("api/unit/" + getUrlParameter('uid'),function(unit){
-			$("#unit_name").text(unit.name);
-			$("#unit_identifier").text(unit.identifier);
-	
-			window.setInterval(function(){
-			$.getJSON("api/unit/" + getUrlParameter('uid') + "/subscriptions",function(subscriptions){
-					toggle_buttons(subscriptions);
-				});
-
-			}, 10000);
-
-		});
-
-
-		
-	$('#row_template').hide();
-	
-	$.getJSON("api/unit/" + getUrlParameter('uid') + "/subscriptions",function(subscriptions){
-		subscriptions.forEach(function(s) {
-    		$(".table tr:last").after($('<tr>' + nano($('#row_template').html(),s) + '</tr>'));
-		});
-
-		toggle_buttons(subscriptions);
+app.directive('toggle', function(){
+	  return {
+	    restrict: 'A',
+	    link: function(scope, element, attrs){
+	      if (attrs.toggle=="tooltip"){
+	        $(element).tooltip();
+	      }
+	    }
+	  };
 	});
 
-});
-
-function toggle_buttons(subscriptions){
-
-	$("button").each(function(index){
-		if ($(this).is(":visible")){
-			var activity = $(this).attr('activity');
-			var type = $(this).attr('t');
-			var number = $(this).attr('n')
-			var s = get_subscription(subscriptions,activity);
-			var button = $(this);
-			
-
-		}
-
-	});
-}
-
-
-function get_subscription(subscriptions, identifier){
-	for (var i = 0; i < subscriptions.length; i++) {
-   	   if (subscriptions[i].identifier == identifier)
-   	   		return subscriptions[i];
- 	} 
-}
+var uid = getUrlParameter("uid");
 
 function getUrlParameter(sParam) {
     var sPageURL = decodeURIComponent(window.location.search.substring(1)),

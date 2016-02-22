@@ -86,7 +86,7 @@ app.post('/pinakarri/api/unit/:uid/subscription/:oa', function (req, res) {
     var uid = req.params.uid
     var oa = req.params.oa
     var type = req.query.type
-    
+
     findUnit(req,res, function(unit){
       db.collection("locks").insertOne({createdAt: new Date(), key: unit.identifier}, {w:1}, function(err,lock){
         if (err!=null){
@@ -105,17 +105,17 @@ app.post('/pinakarri/api/unit/:uid/subscription/:oa', function (req, res) {
               res.status(400).send('You already have ' + count + ' seats');   
             }else {
 
-              db.collection("tickets").findAndModify({activity: oa, type: type, booked_by : {$exists:false}}, [], {$set : {booked_by: unit.identifier}}, function(err,doc){
+              db.collection("tickets").findAndModify({activity: oa, type: type, booked_by : {$exists:false}}, [], {$set : {booked_by: unit.identifier, booked_at: new Date()}}, function(err,doc){
                 if (doc.value == null){
                   console.log(unit.identifier + " " + (type=='P'?"participant":"leader") + " attempted to book " + oa + " but no more tickets available.");
+                  res.status(400).send('Sorry, no more tickets available');
                 } else{
                   console.log(unit.identifier + " " + (type=='P'?"participant":"leader") + " booked " + oa);
+                  db.collection("locks").remove( { key: unit.identifier });
+                  fetch_subscriptions(req,res, function(subscriptions){
+                    res.json(subscriptions);
+                  });
                 }
-
-                db.collection("locks").remove( { key: unit.identifier });
-                fetch_subscriptions(req,res, function(subscriptions){
-                  res.json(subscriptions);
-                });
               });
             }
           });
@@ -131,7 +131,7 @@ app.delete('/pinakarri/api/unit/:uid/subscription/:oa', function (req, res) {
     var type = req.query.type
     findUnit(req,res, function(unit){
 
-      db.collection("tickets").findAndModify({activity: oa, type:type, booked_by : unit.identifier}, [], {$unset : {booked_by: ""}}, function(err,doc){
+      db.collection("tickets").findAndModify({activity: oa, type:type, booked_by : unit.identifier}, [], {$unset : {booked_by: "", booked_at:""}}, function(err,doc){
           if (doc.value == null){
             console.log(unit.identifier + " " + (type=='P'?"participant":"leader") + " attempted to unbook " + oa + " - but does not have a ticket!");
           }else{  

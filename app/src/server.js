@@ -132,7 +132,11 @@ app.delete('/pinakarri/api/unit/:uid/subscription/:oa', function (req, res) {
     findUnit(req,res, function(unit){
 
       db.collection("tickets").findAndModify({activity: oa, type:type, booked_by : unit.identifier}, [], {$unset : {booked_by: ""}}, function(err,doc){
-          console.log(unit.identifier + " " + (type=='P'?"participant":"leader") + " unbooked " + oa);
+          if (doc.value == null){
+            console.log(unit.identifier + " " + (type=='P'?"participant":"leader") + " attempted to unbook " + oa + " - but does not have a ticket!");
+          }else{  
+            console.log(unit.identifier + " " + (type=='P'?"participant":"leader") + " unbooked " + oa);
+          }
          fetch_subscriptions(req,res, function(subscriptions){
           res.json(subscriptions);
         });

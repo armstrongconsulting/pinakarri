@@ -108,7 +108,12 @@ app.post('/pinakarri/api/unit/:uid/subscription/:oa', function (req, res) {
             }else {
 
               db.collection("tickets").findAndModify({activity: oa, type: type, booked_by : {$exists:false}}, [], {$set : {booked_by: unit.identifier}}, function(err,doc){
-                console.log(unit.identifier + " " + (type=='P'?"participant":"leader") + " booked " + oa);
+                if (doc.value == null){
+                  console.log(unit.identifier + " " + (type=='P'?"participant":"leader") + " attempted to book " + oa + " but no more tickets available.");
+                } else{
+                  console.log(unit.identifier + " " + (type=='P'?"participant":"leader") + " booked " + oa);
+                }
+
                 db.collection("locks").remove( { key: unit.identifier });
                 fetch_subscriptions(req,res, function(subscriptions){
                   res.json(subscriptions);

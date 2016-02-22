@@ -18,7 +18,6 @@ const app = express();
 var db;
 
 var findUnit = function(req, res, callback){
-  mongo.connect(mongo_url, function(err, db){
   db.collection('units').findOne({uid:req.params.uid},function(err,unit){
       if (unit != null){
         callback(unit);
@@ -26,7 +25,6 @@ var findUnit = function(req, res, callback){
         res.status(404).send('unit not found');
       }
   });
-});
      
 };
 

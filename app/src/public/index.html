@@ -13,8 +13,13 @@
     
     <div class="jumbotron" ng-controller="UnitController">
        <div class="container"> 
-      <h1>Pinakarri RaRo Offsite Activities</h1>
-      <p>{{ unit.name }} ({{ unit.identifier }})</p>
+        <div>
+        <h1>Pinakarri RaRo Offsite Activities</h1>
+        <p>{{ unit.name }} ({{ unit.identifier }})</p>
+        </div>
+        <div>
+        In order to book an activity, click the "Book" button. It will then turn green. This indicates that you have booked a seat. If there is no button available, then there are no remaining seats.
+        </div>
       </div>
   </div>
 
@@ -31,21 +36,20 @@
             <td>{{ activity.identifier }}</td> 
           <td><a href="{{activity.external_link}}" target="{{activity.identifier}}">{{ activity.name}}</a></td>
           <td>
-            <div><b>{{ activity.participants.available}}</b> seat(s) available, You have already booked <b>{{ activity.participants.booked}}</b> seat(s)</div>
+            <div><p><b>{{ activity.participants.available}}</b> seat(s) available</p><p><b>{{ activity.participants.booked}}</b> seat(s) booked by you</p></div>
             <hr/>
             <span ng-repeat="i in [1, 2, 3] track by $index">
-                <button ng-show="activity.participants.booked >= i" type="button" class="btn btn-success book-button"  title="Click to un-book your seat" data-toggle="tooltip" ng-click="unsubscribe(activity.identifier)">Unbook</button>
-                <button ng-show="activity.participants.booked < i && activity.participants.available >= i" type="button" class="btn btn-primary book-button"  title="Click to book your seat" data-toggle="tooltip" ng-click="subscribe(activity.identifier)">Book </button>
-                <button ng-show="activity.participants.booked < i && activity.participants.available < i" type="button" class="btn btn-danger disabled book-button"  title="Activity is booked-up" data-toggle="tooltip">n/a</button>
+                <button ng-show="activity.participants.booked >= i" type="button" class="btn btn-success book-button"  title="This seat belongs to you! If you click here again, you unbook your seat. Others may then take it." data-toggle="tooltip" ng-click="unsubscribe(activity.identifier)">Unbook</button>
+                <button ng-show="activity.participants.booked < i && activity.participants.available > 0" type="button" class="btn btn-primary book-button"  title="Click to book your seat" data-toggle="tooltip" ng-click="subscribe(activity.identifier)">Book</button>
             </span>
           </td> 
           <td><div>
-            <div>{{ activity.leaders.available}} seat(s) available</div>
+            <div><p><b>{{ activity.leaders.available}}</b> seat(s) available</p><p><b>{{ activity.leaders.booked}}</b> seat(s) booked by you.</div>
             <hr/>
             <div>
                 <button ng-show="activity.leaders.booked >= 1" type="button" class="btn btn-success book-button"  title="Click to un-book your seat" data-toggle="tooltip" ng-click="unsubscribeLeader(activity.identifier)">Unbook</button>
                 <button ng-show="activity.leaders.booked < 1 && activity.leaders.available >= 1" type="button" class="btn btn-primary book-button"  title="Click to book your seat" data-toggle="tooltip" ng-click="subscribeLeader(activity.identifier)">Book</button>
-                <button ng-show="activity.leaders.booked < 1 && activity.leaders.available < 1" type="button" class="btn btn-danger disabled book-button"  title="Activity is booked-up" data-toggle="tooltip">n/a</button>
+            
             </div>
           </div></td> 
       </tr> 

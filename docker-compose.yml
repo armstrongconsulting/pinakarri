@@ -1,0 +1,35 @@
+db:
+  container_name: pinakarri_db
+  image: mongo
+  volumes:
+  - /data/pinakarri/db:/data/db
+
+  restart: always
+
+app:
+  container_name: pinakarri_app
+  build: app
+
+  ports:
+  - 9000:8080
+
+  links:
+   - db:db
+ 
+  restart: always
+
+admin:
+  container_name: pinakarri_admin
+  build: admin
+  ports:
+  - 9002:8081
+  
+  links:
+  - db:db
+
+  environment:
+    ME_CONFIG_MONGODB_SERVER: db
+    ME_CONFIG_MONGODB_PORT: 27017
+
+  restart: always
+ 

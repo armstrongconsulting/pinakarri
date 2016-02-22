@@ -9,6 +9,11 @@ const array = require('array');
 var fs = require('fs');
 var mongo_url = "mongodb://localhost:27017/pinakarri"
 
+if (process.argv.length >= 3 && process.argv[2].startsWith('mongodb://'))
+  mongo_url = process.argv[2];
+
+console.log(mongo_url);
+
 // Constants
 const PORT = 8080;
 

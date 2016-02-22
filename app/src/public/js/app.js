@@ -27,3 +27,4 @@ function getUrlParameter(sParam) {
         }
     }
 };
+

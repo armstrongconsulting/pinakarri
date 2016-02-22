@@ -3,11 +3,11 @@ var fs = require('fs');
 var co = require('co');
 
 module.exports = {
-  import_xls: function (mongo, mongo_url) {
+  import_xls: function (db) {
  
 
     var data = xls.parse("source_data/data.xlsx");
-	var units = [];
+	  var units = [];
     var activities = [];
 
     var unit_docs = [];
@@ -45,8 +45,7 @@ module.exports = {
 
 	co(function*() {
 		console.log("Starting import");
-		var db = yield mongo.connect(mongo_url);
-
+	
 		var col = db.collection('units');
 		yield col.ensureIndex('identifier', {unique:true, background:true, w:1})
 	
@@ -58,10 +57,14 @@ module.exports = {
 		col = db.collection('activities');
 		yield col.ensureIndex('identifier', {unique:true, background:true, w:1})
 
+    var tickets = db.collection('tickets'); 
+    yield tickets.ensureIndex('id', {unique:true, background:true, w:1})
+
 		for (var i = 0; i < activity_docs.length; i++) {
 			yield col.insertOne(activity_docs[i], {w:0}); //w:0 -> don't fail on duplicates
+      yield tickets.insertMany(createTickets(activity_docs[i].identifier, activity_docs[i].participants, 'P'), {w:0});
+      yield tickets.insertMany(createTickets(activity_docs[i].identifier, activity_docs[i].leaders, 'L'), {w:0});
 	 	}
-
 	}).then(function () {
   		console.log("Import finished");
 	}, function (err) {
@@ -72,6 +75,19 @@ module.exports = {
   }
   
 };
+
+function createTickets(activity_identifier, count, type){
+  tickets = [];
+  for (var i = 0; i < count; i++){
+    tickets.push(
+    {
+      id : activity_identifier + "/" + (i+1) + "/" + type,
+      type : type,
+      activity : activity_identifier
+    });
+  }
+  return tickets;
+}
 
 function guid() {
   function s4() {

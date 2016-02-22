@@ -30,14 +30,22 @@ var findUnit = function(req, res, callback){
 
 app.use('/pinakarri', express.static(__dirname + '/public'));
 
-app.get('/pinakarri/units', function (req, res) {
-  var data = [['id','raro','begleiter','raro gebucht','begleiter gebucht'],[3]];
-  res.csv(data);
+app.get('/pinakarri/tickets', function (req, res) {
+  var data = [['date', 'activity', 'type', 'unit']];
+
+  db.collection('tickets').find().toArray(function(err,all_tickets){
+    all_tickets.forEach(function(ticket){
+      if (ticket.booked_by){
+        data.push([ticket.booked_at,ticket.activity,ticket.type,ticket.booked_by]);
+      }
+    });
+
+    res.csv(data);
+  });
+
 });
 
-app.get('/pinakarri/subscriptions', function (req, res) {
- res.csv([ { name: "joe", id: 1 }]);
-});
+
 
 
 app.get('/pinakarri/api/unit/:uid', function (req, res) {

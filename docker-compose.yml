@@ -1,4 +1,4 @@
-db:
+mongo:
   container_name: pinakarri_db
   image: mongo
   volumes:
@@ -6,7 +6,7 @@ db:
 
   restart: always
 
-app:
+pinakarri-app:
   container_name: pinakarri_app
   build: app
 
@@ -14,22 +14,20 @@ app:
   - 9000:8080
 
   links:
-   - db:db
+   - mongo:db
  
   restart: always
 
-admin:
+ 
+mongo-express:
   container_name: pinakarri_admin
-  build: admin
+  image: knickers/mongo-express:0.30.11
+
   ports:
-  - 9002:8081
-  
+    - 9001:8081
   links:
-  - db:db
-
-  environment:
-    ME_CONFIG_MONGODB_SERVER: db
-    ME_CONFIG_MONGODB_PORT: 27017
-
+    - mongo
+  
   restart: always
- 
+
+

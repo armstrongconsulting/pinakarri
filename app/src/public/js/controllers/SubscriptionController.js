@@ -13,6 +13,7 @@ app.controller("SubscriptionController", function($scope,$http) {
 	$http.post("api/unit/" + uid + "/subscription/" + oa + "?type=P").success(function(subscriptions){
 		$scope.alerts.push({type:'success', msg:'You subscribed to ' + oa});
 		$scope.subscriptions = subscriptions;
+		$scope.$emit("subscription_changed", {action:'add', activity: oa , type : 'P'});
 	}).error(function(data, status) {
 		if (status == 400){
   			$scope.alerts.push({type:'danger', msg:'Unable to get a seat for ' + oa + ': '+ data});
@@ -27,6 +28,7 @@ app.controller("SubscriptionController", function($scope,$http) {
 	$http.delete("api/unit/" + uid + "/subscription/" + oa + "?type=P").success(function(subscriptions){
 		$scope.alerts.push({type:'info', msg:'You un-subscribed from ' + oa});
 		$scope.subscriptions = subscriptions;
+		$scope.$emit("subscription_changed", {action:'remove', activity: oa , type : 'P'});
 	});
   }
 
@@ -37,6 +39,7 @@ app.controller("SubscriptionController", function($scope,$http) {
 	$http.post("api/unit/" + uid + "/subscription/" + oa + "?type=L").success(function(subscriptions){
 		$scope.alerts.push({type:'success', msg:'You subscribed a leader to ' + oa});
 		$scope.subscriptions = subscriptions;
+		$scope.$emit("subscription_changed", {action:'add', activity: oa , type : 'L'});
 	}).error(function(data, status) {
 		if (status == 400){
   			$scope.alerts.push({type:'danger', msg:'Unable to get a seat for ' + oa + ': '+ data});
@@ -51,6 +54,7 @@ app.controller("SubscriptionController", function($scope,$http) {
 	$http.delete("api/unit/" + uid + "/subscription/" + oa + "?type=L").success(function(subscriptions){
 		$scope.alerts.push({type:'info', msg:'You un-subscribed a leader from ' + oa});
 		$scope.subscriptions = subscriptions;
+		$scope.$emit("subscription_changed", {action:'remove', activity: oa , type : 'L'});
 	});
   }
 

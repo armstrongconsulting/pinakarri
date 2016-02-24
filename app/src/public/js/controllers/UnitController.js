@@ -1,7 +1,22 @@
  app.controller("UnitController", function($scope,$location,$http) {
  
-  $http.get("api/unit/" + uid).success(function(unit){
-	$scope.unit = unit;
+  fetch();
+
+  function fetch(){
+	$http.get("api/unit/" + uid).success(function(unit){
+
+		unit.completed = {
+			leaders: Math.ceil(unit.tickets.leaders.length * 100 / unit.leaders),
+			participants: Math.ceil(unit.tickets.participants.length * 100 / unit.participants),
+		};
+
+		$scope.unit = unit;
+	 });
+  }
+
+  $scope.$on("subscription_changed", function (event, args) {
+  	console.log("asdfasdfasdf");
+   	fetch();
   });
   
 });

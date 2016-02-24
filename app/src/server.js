@@ -53,7 +53,15 @@ app.get('/pinakarri/tickets', function (req, res) {
 
 app.get('/pinakarri/api/unit/:uid', function (req, res) {
     findUnit(req,res, function(unit){ 
-        res.json(unit);
+        db.collection('tickets').find({booked_by:unit.identifier}).toArray(function(err,all_tickets){
+          var tickets = array(all_tickets);  
+          unit.tickets = {
+              leaders : tickets.select("type == 'L'").sort('activity','ascending').map('activity'),
+              participants : tickets.select("type == 'P'").sort('activity','ascending').map('activity')
+          };
+
+          res.json(unit);
+        });
     });
 
 });
@@ -107,29 +115,39 @@ app.post('/pinakarri/api/unit/:uid/subscription/:oa', function (req, res) {
         }else {
 
           //Verify that the unit has not yet booked too much of the activity
-          db.collection("tickets").count({type:type, activity:oa, booked_by:unit.identifier}, function(err, count) {
+          db.collection("tickets").count({type:type, booked_by:unit.identifier}, function(err, tickets_already_booked) {
 
-            var overbooked = (type == 'P' && count >= 3) || (type == 'L' && count >= 1);
-            if (overbooked){
-              console.log(unit.identifier + " overbooking attempt for activity  " + oa + " was prevented");
-              db.collection("locks").remove( { key: unit.identifier });
-              res.status(400).send('You already have ' + count + ' seats');   
-            }else {
+              var overbooked = (type == 'P' && tickets_already_booked >= unit.participants) || (type == 'L' && tickets_already_booked >= unit.leaders);
+              if (overbooked) {
+                 console.log(unit.identifier + " overbooking attempt for activity  " + oa + " was prevented (already booked all available seats)");
+                 db.collection("locks").remove( { key: unit.identifier });
+                 res.status(400).send('You are already finished, you have booked all your ' + tickets_already_booked + ' seats');   
+              }else{
+                db.collection("tickets").count({type:type, activity:oa, booked_by:unit.identifier}, function(err, booked_for_this_activity) {
 
-              db.collection("tickets").findAndModify({activity: oa, type: type, booked_by : {$exists:false}}, [], {$set : {booked_by: unit.identifier, booked_at: new Date()}}, function(err,doc){
-                if (doc.value == null){
-                  console.log(unit.identifier + " " + (type=='P'?"participant":"leader") + " attempted to book " + oa + " but no more tickets available.");
-                  res.status(400).send('Sorry, no more tickets available');
-                } else{
-                  console.log(unit.identifier + " " + (type=='P'?"participant":"leader") + " booked " + oa);
-                  db.collection("locks").remove( { key: unit.identifier });
-                  fetch_subscriptions(req,res, function(subscriptions){
-                    res.json(subscriptions);
-                  });
-                }
-              });
-            }
-          });
+                  var overbooked = (type == 'P' && booked_for_this_activity >= 3) || (type == 'L' && booked_for_this_activity >= 1);
+                  if (overbooked){
+                    console.log(unit.identifier + " overbooking attempt for activity  " + oa + " was prevented (exhausted the 3/1 seats contraint)");
+                    db.collection("locks").remove( { key: unit.identifier });
+                    res.status(400).send('You already have booked ' + booked_for_this_activity + ' seats');   
+                  }else {
+
+                      db.collection("tickets").findAndModify({activity: oa, type: type, booked_by : {$exists:false}}, [], {$set : {booked_by: unit.identifier, booked_at: new Date()}}, function(err,doc){
+                        if (doc.value == null){
+                          console.log(unit.identifier + " " + (type=='P'?"participant":"leader") + " attempted to book " + oa + " but no more tickets available.");
+                          res.status(400).send('Sorry, no more tickets available');
+                        } else{
+                          console.log(unit.identifier + " " + (type=='P'?"participant":"leader") + " booked " + oa);
+                          db.collection("locks").remove( { key: unit.identifier });
+                          fetch_subscriptions(req,res, function(subscriptions){
+                            res.json(subscriptions);
+                          });
+                        }
+                      });
+                   }
+                });
+              }
+            });
         }
       });
     });

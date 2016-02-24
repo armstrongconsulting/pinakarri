@@ -11,64 +11,98 @@
   </head>
   <body ng-app="pinakarriApp">
     
-    <div class="jumbotron" ng-controller="UnitController">
-       <div class="container"> 
-        <div>
-        <h1>Pinakarri RaRo Offsite Activities</h1>
-        <p>{{ unit.name }} ({{ unit.identifier }})</p>
-        </div>
-        <div>
-        In order to book an activity, click the "Book" button. It will then turn green. This indicates that you have booked a seat. If there is no button available, then there are no remaining seats. You can book up to 3 RaRo and up to 1 leader for the same activity.
-        </div>
-      </div>
-  </div>
+    <div ng-controller="UnitController">
+		<div class="jumbotron">
+	      <div class="container"> 
+	         <h1>Pinakarri RaRo Offsite Activities</h1>
+	         <p>{{ unit.name }} ({{ unit.identifier }})</p>
+	         
+	         <div class="panel panel-default">
+	           <div class="panel-heading">
+	             You have <b>{{unit.participants}}</b> Rangers and Rovers and have booked <b>{{unit.tickets.participants.length}}</b> activities
+	           </div>
+	           <div ng-show="unit.completed.participants == 0"  class="panel-body">
+	               <div class="alert alert-danger">
+	                 <strong>You have not yet booked an activity for your Rangers and Rovers!</strong>
+	               </div>
+	           </div>
+	           <div ng-show="unit.completed.participants>0"  class="panel-body">
+	              <div class="progress">
+	                 <div class="progress-bar progress-bar-{{unit.completed.participants < 100 ? 'warning':'success'}}" role="progressbar" aria-valuenow="{{unit.completed.participants}}" aria-valuemin="0" aria-valuemax="100" style="width:{{unit.completed.participants}}%"> {{unit.completed.participants}}% completed</div>
+	               </div>
+	               <b>Booked activities:</b> <span ng-repeat="a in unit.tickets.participants track by $index">{{a}} </span>
+	           </div>
+	         </div>  
+	
+			 <div class="panel panel-default">
+	            <div class="panel-heading">You have <b>{{unit.leaders}}</b> leader(s) and have booked <b>{{unit.tickets.leaders.length}}</b> activities</div>
+	            <div ng-show="unit.completed.leaders == 0"  class="panel-body">
+	                <div class="alert alert-danger">
+	                  <strong>You have not yet booked an activity for your leader(s)!</strong>
+	                </div>
+	            </div>    
+	            <div ng-show="unit.completed.leaders>0" class="panel-body">
+	               <div class="progress">
+	                  <div class="progress-bar progress-bar-{{unit.completed.leaders < 100 ? 'warning':'success'}}" role="progressbar" aria-valuenow="{{unit.completed.leaders}}" aria-valuemin="0" aria-valuemax="100" style="width:{{unit.completed.leaders}}%"> {{unit.completed.leaders}}% completed</div>
+	                </div>
+	                <b>Booked activities:</b> <span ng-repeat="a in unit.tickets.leaders track by $index">{{a}} </span>
+	            </div>
+	         </div>
 
-    <div class="main" ng-controller="SubscriptionController">
-      <div class="container">  
-
-          <div style="position: fixed; top: 10px; right: 10px;" ng-repeat="alert in alerts">
-              <div class="alert alert-{{alert.type}}">
-                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                {{ alert.msg }}
-              </div>
-          </div>
-
-          <div class="table-responsive"> 
-          <table class="table table-hover">
-          <thead>
-          <tr><th>Id</th><th>Name</th><th>Ranger / Rovers</th><th>Leaders</th></tr>
-          </thead>
-        <tbody ng-repeat="activity in subscriptions"> 
-        <tr> 
-            <td>{{ activity.identifier }}</td> 
-          <td><a href="{{activity.external_link}}" target="{{activity.identifier}}">{{ activity.name}}</a></td>
-          <td>
-            <div><p><b>{{ activity.participants.available}}</b> seat(s) available</p><p><b>{{ activity.participants.booked}}</b> seat(s) booked by you</p></div>
-            <hr/>
-            <span ng-repeat="i in [1, 2, 3] track by $index">
-                <button ng-show="activity.participants.booked >= i" type="button" class="btn btn-success book-button"  title="This seat belongs to you! If you click here again, you unbook your seat. Others may then take it." data-toggle="tooltip" ng-click="unsubscribe(activity.identifier)">Unbook</button>
-                <button ng-show="activity.participants.booked < i && activity.participants.available > 0" type="button" class="btn btn-primary book-button"  title="Click to book your seat" data-toggle="tooltip" ng-click="subscribe(activity.identifier)">Book</button>
-                <button ng-show="!(activity.participants.booked >= i) && !(activity.participants.booked < i && activity.participants.available > 0)" type="button" class="btn btn-danger book-button" data-toggle="tooltip" disabled>n/a</button>
-            </span>
-          </td> 
-          <td><div>
-            <div><p><b>{{ activity.leaders.available}}</b> seat(s) available</p><p><b>{{ activity.leaders.booked}}</b> seat(s) booked by you.</div>
-            <hr/>
-            <div>
-                <button ng-show="activity.leaders.booked >= 1" type="button" class="btn btn-success book-button"  title="Click to un-book your seat" data-toggle="tooltip" ng-click="unsubscribeLeader(activity.identifier)">Unbook</button>
-                <button ng-show="activity.leaders.booked < 1 && activity.leaders.available >= 1" type="button" class="btn btn-primary book-button"  title="Click to book your seat" data-toggle="tooltip" ng-click="subscribeLeader(activity.identifier)">Book</button>
-                <button ng-show="!(activity.leaders.booked >= 1) && !(activity.leaders.booked < 1 && activity.leaders.available >= 1)" type="button" class="btn btn-danger book-button" data-toggle="tooltip" disabled>n/a</button>
-            
+            <div ng-show="unit.completed.leaders == 100 && unit.completed.participants == 100" class="alert alert-success">
+              <p><strong>Thank you!</strong> You are done. You have booked all your available seats. No further action is required at this point.</p>
             </div>
-          </div></td> 
-      </tr> 
-      </tbody>
-      </table>
-      </div>
-      </div>
-    </div>
-
-
+	
+	           <div ng-show="unit.completed.leaders < 100 || unit.completed.participants < 100" class="container">
+	              <p>In order to book an activity, click the "Book" button. It will then turn green. This indicates that you have booked a seat. If there is no button available, then there are no remaining seats. You can book up to 3 RaRo and up to 1 leader for the same activity.</p>
+	      	   </div>
+	
+	      </div>
+	
+	   	</div>
+		<div class="main" ng-controller="SubscriptionController">
+		   <div class="container">  
+		       <div style="position: fixed; top: 10px; right: 10px;" ng-repeat="alert in alerts">
+		           <div class="alert alert-{{alert.type}}">
+		             <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+		             {{ alert.msg }}
+		           </div>
+		       </div>
+		       <div class="table-responsive"> 
+			       <table class="table table-hover">
+				       <thead>
+				       <tr><th>Id</th><th>Name</th><th>Ranger / Rovers</th><th>Leaders</th></tr>
+				       </thead>
+			     	   <tbody ng-repeat="activity in subscriptions"> 
+					      <tr> 
+						       <td>{{ activity.identifier }}</td> 
+						       <td><a href="{{activity.external_link}}" target="{{activity.identifier}}">{{ activity.name}}</a></td>
+						       <td>
+						         <div><p><b>{{ activity.participants.available}}</b> seat(s) available</p><p><b>{{ activity.participants.booked}}</b> seat(s) booked by you</p></div>
+						         <hr/>
+						         <span ng-repeat="i in [1, 2, 3] track by $index">
+						             <button ng-show="activity.participants.booked >= i" type="button" class="btn btn-success book-button"  title="This seat belongs to you! If you click here again, you unbook your seat. Others may then take it." data-toggle="tooltip" ng-click="unsubscribe(activity.identifier)">Unbook</button>
+						             <button ng-show="activity.participants.booked < i && activity.participants.available > 0" type="button" class="btn btn-primary book-button"  title="Click to book your seat" data-toggle="tooltip" ng-click="subscribe(activity.identifier)" ng-disabled="unit.completed.participants == 100">Book</button>
+						             <button ng-show="!(activity.participants.booked >= i) && !(activity.participants.booked < i && activity.participants.available > 0)" type="button" class="btn btn-danger book-button" data-toggle="tooltip" disabled>n/a</button>
+						         </span>
+						       </td> 
+						       <td>
+						         <div><p><b>{{ activity.leaders.available}}</b> seat(s) available</p><p><b>{{ activity.leaders.booked}}</b> seat(s) booked by you.</div>
+						         <hr/>
+						         <div>
+						             <button ng-show="activity.leaders.booked >= 1" type="button" class="btn btn-success book-button"  title="Click to un-book your seat" data-toggle="tooltip" ng-click="unsubscribeLeader(activity.identifier)">Unbook</button>
+						             <button ng-show="activity.leaders.booked < 1 && activity.leaders.available >= 1" type="button" class="btn btn-primary book-button"  title="Click to book your seat" data-toggle="tooltip" ng-click="subscribeLeader(activity.identifier)" ng-disabled="unit.completed.leaders == 100">Book</button>
+						             <button ng-show="!(activity.leaders.booked >= 1) && !(activity.leaders.booked < 1 && activity.leaders.available >= 1)" type="button" class="btn btn-danger book-button" data-toggle="tooltip" disabled>n/a</button>
+						         
+						         </div>
+						       </td> 
+					      	</tr> 
+			   		   </tbody>
+		  		 </table>
+		   	  </div>
+		   </div>
+		</div>
+	</div>
     <!-- Modules -->
     <script src="js/app.js"></script>
  

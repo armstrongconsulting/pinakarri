@@ -12,6 +12,21 @@
   <body ng-app="pinakarriApp">
     
     <div ng-controller="UnitController">
+    	<div  ng-show="!unit.identifier">
+	    	<div class="jumbotron">
+		    	<div class="container"> 
+			         <h1>Pinakarri RaRo Offsite Activities</h1>
+			    </div>
+			</div>
+		    <div class="main">
+		    	<div class="container">
+		    		<div clas="row">
+		    		<p>You have reached the application for booking offsite activities, however something went wrong since you could not be identified. Please check that you enter the app with the link you have received via email. In case of problems, please contat us at <strong>raro@pinakarri.at</strong>
+		    		</div>
+		    	</div>
+		    </div>
+    	</div>
+    	<div ng-show="unit.identifier">
 		<div class="jumbotron">
 	      <div class="container"> 
 	         <h1>Pinakarri RaRo Offsite Activities</h1>
@@ -101,6 +116,7 @@
 		  		 </table>
 		   	  </div>
 		   </div>
+		</div>
 		</div>
 	</div>
     <!-- Modules -->

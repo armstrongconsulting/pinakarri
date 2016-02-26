@@ -15,7 +15,7 @@
   }
 
   $scope.$on("subscription_changed", function (event, args) {
-  	console.log("asdfasdfasdf");
+  	console.log("Re-fetch unit");
    	fetch();
   });
   

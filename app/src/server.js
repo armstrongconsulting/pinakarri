@@ -102,55 +102,56 @@ app.get('/pinakarri/api/unit/:uid/subscriptions', function (req, res) {
 });
 
 app.post('/pinakarri/api/unit/:uid/subscription/:oa', function (req, res) {
+
     var uid = req.params.uid
-    var oa = req.params.oa
-    var type = req.query.type
+        var oa = req.params.oa
+        var type = req.query.type
 
-    findUnit(req,res, function(unit){
-      db.collection("locks").insertOne({createdAt: new Date(), key: unit.identifier}, {w:1}, function(err,lock){
-        if (err!=null){
-            console.log(err);
-            console.log(unit.identifier + " was prevented from booking simultaniously");
-            res.status(400).send('Please wait.. You cannot book seats simultaniously');   
-        }else {
+        findUnit(req,res, function(unit){
+          db.collection("locks").insertOne({createdAt: new Date(), key: unit.identifier}, {w:1}, function(err,lock){
+            if (err!=null){
+                console.log(err);
+                console.log(unit.identifier + " was prevented from booking simultaniously");
+                res.status(400).send('Please wait.. You cannot book seats simultaniously');   
+            }else {
 
-          //Verify that the unit has not yet booked too much of the activity
-          db.collection("tickets").count({type:type, booked_by:unit.identifier}, function(err, tickets_already_booked) {
+              //Verify that the unit has not yet booked too much of the activity
+              db.collection("tickets").count({type:type, booked_by:unit.identifier}, function(err, tickets_already_booked) {
 
-              var overbooked = (type == 'P' && tickets_already_booked >= unit.participants) || (type == 'L' && tickets_already_booked >= unit.leaders);
-              if (overbooked) {
-                 console.log(unit.identifier + " overbooking attempt for activity  " + oa + " was prevented (already booked all available seats)");
-                 db.collection("locks").remove( { key: unit.identifier });
-                 res.status(400).send('You are already finished, you have booked all your ' + tickets_already_booked + ' seats');   
-              }else{
-                db.collection("tickets").count({type:type, activity:oa, booked_by:unit.identifier}, function(err, booked_for_this_activity) {
+                  var overbooked = (type == 'P' && tickets_already_booked >= unit.participants) || (type == 'L' && tickets_already_booked >= unit.leaders);
+                  if (overbooked) {
+                     console.log(unit.identifier + " overbooking attempt for activity  " + oa + " was prevented (already booked all available seats)");
+                     db.collection("locks").remove( { key: unit.identifier });
+                     res.status(400).send('You are already finished, you have booked all your ' + tickets_already_booked + ' seats');   
+                  }else{
+                    db.collection("tickets").count({type:type, activity:oa, booked_by:unit.identifier}, function(err, booked_for_this_activity) {
 
-                  var overbooked = (type == 'P' && booked_for_this_activity >= 3) || (type == 'L' && booked_for_this_activity >= 1);
-                  if (overbooked){
-                    console.log(unit.identifier + " overbooking attempt for activity  " + oa + " was prevented (exhausted the 3/1 seats contraint)");
-                    db.collection("locks").remove( { key: unit.identifier });
-                    res.status(400).send('You already have booked ' + booked_for_this_activity + ' seats');   
-                  }else {
+                      var overbooked = (type == 'P' && booked_for_this_activity >= 3) || (type == 'L' && booked_for_this_activity >= 1);
+                      if (overbooked){
+                        console.log(unit.identifier + " overbooking attempt for activity  " + oa + " was prevented (exhausted the 3/1 seats contraint)");
+                        db.collection("locks").remove( { key: unit.identifier });
+                        res.status(400).send('You already have booked ' + booked_for_this_activity + ' seats');   
+                      }else {
 
-                      db.collection("tickets").findAndModify({activity: oa, type: type, booked_by : {$exists:false}}, [], {$set : {booked_by: unit.identifier, booked_at: new Date()}}, function(err,doc){
-                        if (doc.value == null){
-                          console.log(unit.identifier + " " + (type=='P'?"participant":"leader") + " attempted to book " + oa + " but no more tickets available.");
-                          res.status(400).send('Sorry, no more tickets available');
-                        } else{
-                          console.log(unit.identifier + " " + (type=='P'?"participant":"leader") + " booked " + oa);
-                          db.collection("locks").remove( { key: unit.identifier });
-                          fetch_subscriptions(req,res, function(subscriptions){
-                            res.json(subscriptions);
+                          db.collection("tickets").findAndModify({activity: oa, type: type, booked_by : {$exists:false}}, [], {$set : {booked_by: unit.identifier, booked_at: new Date()}}, function(err,doc){
+                            if (doc.value == null){
+                              console.log(unit.identifier + " " + (type=='P'?"participant":"leader") + " attempted to book " + oa + " but no more tickets available.");
+                              res.status(400).send('Sorry, no more tickets available');
+                            } else{
+                              console.log(unit.identifier + " " + (type=='P'?"participant":"leader") + " booked " + oa);
+                              db.collection("locks").remove( { key: unit.identifier });
+                              fetch_subscriptions(req,res, function(subscriptions){
+                                res.json(subscriptions);
+                              });
+                            }
                           });
-                        }
-                      });
-                   }
+                       }
+                    });
+                  }
                 });
-              }
-            });
-        }
-      });
-    });
+            }
+          });
+        });
 
 });
 
@@ -194,6 +195,13 @@ mongo.connect(mongo_url, function(err, database) {
 
   app.listen(PORT);
   console.log('Running on http://localhost:' + PORT);
+
+  db.collection('units').find().toArray(function(err,units){
+      units.forEach(function(unit){
+        console.log(unit.identifier + ": http://localhost:8080/pinakarri?uid=" + unit.uid);
+      })
+  });
+
 });
 
 

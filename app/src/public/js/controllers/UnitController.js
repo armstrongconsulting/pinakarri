@@ -1,8 +1,8 @@
  app.controller("UnitController", function($scope,$location,$http) {
  
-  fetch();
+  fetch_unit();
 
-  function fetch(){
+  function fetch_unit(){
 	$http.get("api/unit/" + uid).success(function(unit){
 
 		unit.completed = {
@@ -15,8 +15,7 @@
   }
 
   $scope.$on("subscription_changed", function (event, args) {
-  	console.log("Re-fetch unit");
-   	fetch();
+   	fetch_unit();
   });
   
 });

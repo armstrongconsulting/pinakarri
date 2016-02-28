@@ -102,7 +102,8 @@ app.get('/pinakarri/api/unit/:uid/subscriptions', function (req, res) {
 });
 
 app.post('/pinakarri/api/unit/:uid/subscription/:oa', function (req, res) {
-     var uid = req.params.uid
+    setTimeout(function(){    
+        var uid = req.params.uid
         var oa = req.params.oa
         var type = req.query.type
 
@@ -151,6 +152,8 @@ app.post('/pinakarri/api/unit/:uid/subscription/:oa', function (req, res) {
             }
           });
         });
+
+      },2000);
 
 });
 

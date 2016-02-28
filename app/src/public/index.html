@@ -88,7 +88,8 @@
 						         <hr/>
 						         <span ng-repeat="i in [1, 2, 3] track by $index">
 						             <button ng-disabled="activity.participants.booked > i" ng-show="activity.participants.booked >= i" type="button" class="btn btn-success book-button"  title="This seat belongs to you! If you click here again, you unbook your seat. Others may then take it." data-toggle="tooltip" ng-click="unsubscribe(activity.identifier)">Unbook</button>
-						             <button ng-show="activity.participants.booked < i && activity.participants.available > 0" type="button" class="btn btn-primary book-button"  title="Click to book seat" data-toggle="tooltip" ng-click="subscribe(activity.identifier)" ng-disabled="activity.participants.booked < (i-1) || unit.completed.participants == 100">Book</button>
+						             <button ng-show="activity.participants.booked < i && activity.participants.available > 0" type="button" class="btn btn-primary book-button"  title="Click to book seat" data-toggle="tooltip" ng-click="subscribe(activity.identifier)" ng-disabled="activity.participants.booked < (i-1) || unit.completed.participants == 100">Book
+						             </button>
 						             <button ng-show="!(activity.participants.booked >= i) && !(activity.participants.booked < i && activity.participants.available > 0)" type="button" class="btn btn-danger book-button" data-toggle="tooltip" disabled>n/a</button>
 						         </span>
 						       </td> 

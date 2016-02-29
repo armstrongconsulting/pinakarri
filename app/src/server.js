@@ -34,12 +34,12 @@ var findUnit = function(req, res, callback){
 app.use('/pinakarri', express.static(__dirname + '/public'));
 
 app.get('/pinakarri/tickets', function (req, res) {
-  var data = [['date', 'activity', 'type', 'unit']];
+  var data = [['ticket_id', 'date', 'activity', 'type', 'booked_by']];
 
   db.collection('tickets').find().toArray(function(err,all_tickets){
     all_tickets.forEach(function(ticket){
       if (ticket.booked_by){
-        data.push([ticket.booked_at,ticket.activity,ticket.type,ticket.booked_by]);
+        data.push([ticket.id, ticket.booked_at, ticket.activity,ticket.type == 'P' ? 'RaRo':'Leader',ticket.booked_by]);
       }
     });
 
@@ -102,7 +102,7 @@ app.get('/pinakarri/api/unit/:uid/subscriptions', function (req, res) {
 });
 
 app.post('/pinakarri/api/unit/:uid/subscription/:oa', function (req, res) {
-    setTimeout(function(){    
+//    setTimeout(function(){    
         var uid = req.params.uid
         var oa = req.params.oa
         var type = req.query.type
@@ -136,6 +136,7 @@ app.post('/pinakarri/api/unit/:uid/subscription/:oa', function (req, res) {
                           db.collection("tickets").findAndModify({activity: oa, type: type, booked_by : {$exists:false}}, [], {$set : {booked_by: unit.identifier, booked_at: new Date()}}, function(err,doc){
                             if (doc.value == null){
                               console.log(unit.identifier + " " + (type=='P'?"participant":"leader") + " attempted to book " + oa + " but no more tickets available.");
+                              db.collection("locks").remove( { key: unit.identifier });
                               res.status(400).send('Sorry, no more tickets available');
                             } else{
                               console.log(unit.identifier + " " + (type=='P'?"participant":"leader") + " booked " + oa);
@@ -153,7 +154,7 @@ app.post('/pinakarri/api/unit/:uid/subscription/:oa', function (req, res) {
           });
         });
 
-      },2000);
+//      },2000);
 
 });
 

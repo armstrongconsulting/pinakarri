@@ -21,7 +21,7 @@ app.controller("SubscriptionController", function($scope,$http,$timeout,$q) {
 
   	$timeout(function() {
   		callback();
-    }, 100, false);
+    }, 200, false);
 	    
   };
 

@@ -19,8 +19,6 @@ app.controller("SubscriptionController", function($scope,$http,$timeout,$q) {
  	$scope.processing = oa;
 	$scope.alerts = [];
 
-	console.log($(event.target));
-
   	$timeout(function() {
   		callback();
     }, 100, false);

@@ -89,8 +89,8 @@
 						         <div><p><b>{{ activity.participants.available}}</b> seat(s) available</p><p><b>{{ activity.participants.booked}}</b> seat(s) booked by you</p></div>
 						         <hr/>
 						         <span ng-repeat="i in [1, 2, 3] track by $index">
-						             <button ng-disabled="activity.participants.booked > i" ng-show="activity.participants.booked >= i" type="button" class="btn btn-success book-button"  title="This seat belongs to you! If you click here again, you unbook your seat. Others may then take it." data-toggle="tooltip" ng-click="unsubscribe(activity.identifier)"><i ng-show="processing == activity.identifier" class="fa fa-spinner fa-spin"></i> Unbook</button>
-						             <button ng-show="activity.participants.booked < i && activity.participants.available > 0" type="button" class="btn btn-primary book-button"  title="Click to book a seat" data-toggle="tooltip" ng-click="subscribe(activity.identifier)" ng-disabled="activity.participants.booked < (i-1) || unit.completed.participants == 100"><i ng-show="processing == activity.identifier" class="fa fa-spinner fa-spin"></i> Book
+						             <button ng-disabled="activity.participants.booked > i" ng-show="activity.participants.booked >= i" type="button" class="btn btn-success book-button"  title="This seat belongs to you! If you click here again, you unbook your seat. Others may then take it." data-toggle="tooltip" ng-click="unsubscribe(activity.identifier,$index)"><i ng-show="processing == activity.identifier + '_' + $index" class="fa fa-spinner fa-spin"></i> Unbook</button>
+						             <button ng-show="activity.participants.booked < i && activity.participants.available > 0" type="button" class="btn btn-primary book-button"  title="Click to book a seat" data-toggle="tooltip" ng-click="subscribe(activity.identifier,$index)" ng-disabled="activity.participants.booked < (i-1) || unit.completed.participants == 100"><i ng-show="processing == activity.identifier + '_' + $index" class="fa fa-spinner fa-spin"></i> Book
 						             </button>
 						             <button ng-show="!(activity.participants.booked >= i) && !(activity.participants.booked < i && activity.participants.available > 0)" type="button" class="btn btn-danger book-button" data-toggle="tooltip" disabled>n/a</button>
 						         </span>
@@ -99,8 +99,8 @@
 						         <div><p><b>{{ activity.leaders.available}}</b> seat(s) available</p><p><b>{{ activity.leaders.booked}}</b> seat(s) booked by you.</div>
 						         <hr/>
 						         <div>
-						             <button ng-show="activity.leaders.booked >= 1" type="button" class="btn btn-success book-button"  title="Click to un-book your seat" data-toggle="tooltip" ng-click="unsubscribeLeader(activity.identifier)"><i ng-show="processing == activity.identifier" class="fa fa-spinner fa-spin"></i> Unbook</button>
-						             <button ng-show="activity.leaders.booked < 1 && activity.leaders.available >= 1" type="button" class="btn btn-primary book-button"  title="Click to book your seat" data-toggle="tooltip" ng-click="subscribeLeader(activity.identifier)" ng-disabled="activity.leaders.booked > i || unit.completed.leaders == 100"><i ng-show="processing == activity.identifier" class="fa fa-spinner fa-spin"></i> Book</button>
+						             <button ng-show="activity.leaders.booked >= 1" type="button" class="btn btn-success book-button"  title="Click to un-book your seat" data-toggle="tooltip" ng-click="unsubscribeLeader(activity.identifier,'L')"><i ng-show="processing == activity.identifier + '_L'" class="fa fa-spinner fa-spin"></i> Unbook</button>
+						             <button ng-show="activity.leaders.booked < 1 && activity.leaders.available >= 1" type="button" class="btn btn-primary book-button"  title="Click to book your seat" data-toggle="tooltip" ng-click="subscribeLeader(activity.identifier,'L')" ng-disabled="activity.leaders.booked > i || unit.completed.leaders == 100"><i ng-show="processing == activity.identifier + '_L'" class="fa fa-spinner fa-spin"></i> Book</button>
 						             <button ng-show="!(activity.leaders.booked >= 1) && !(activity.leaders.booked < 1 && activity.leaders.available >= 1)" type="button" class="btn btn-danger book-button" data-toggle="tooltip" disabled>n/a</button>
 						         
 						         </div>

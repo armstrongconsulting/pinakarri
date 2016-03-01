@@ -13,10 +13,10 @@ app.controller("SubscriptionController", function($scope,$http,$timeout,$q) {
   fetch_subscriptions();
 
 
-  var submit = function submit(oa, callback){
+  var submit = function submit(oa, button_id, callback){
 
 	if ($scope.processing != "") return;
- 	$scope.processing = oa;
+ 	$scope.processing = oa + "_"  + button_id;
 	$scope.alerts = [];
 
   	$timeout(function() {
@@ -25,9 +25,9 @@ app.controller("SubscriptionController", function($scope,$http,$timeout,$q) {
 	    
   };
 
-  $scope.subscribe = function(oa){
+  $scope.subscribe = function(oa, button_id){
 
-  	submit(oa, function() {
+  	submit(oa, button_id, function() {
         	$http.post("api/unit/" + uid + "/subscription/" + oa + "?type=P").success(function(subscriptions){
 			$scope.processing = "";
 			$scope.alerts.push({type:'success', msg:'You subscribed to ' + oa});
@@ -44,9 +44,9 @@ app.controller("SubscriptionController", function($scope,$http,$timeout,$q) {
     });
   }
 
-  $scope.unsubscribe = function(oa){
+  $scope.unsubscribe = function(oa, button_id){
 
-	submit(oa, function() {
+	submit(oa, button_id, function() {
 		$http.delete("api/unit/" + uid + "/subscription/" + oa + "?type=P").success(function(subscriptions){
 			$scope.processing = "";
 			$scope.alerts.push({type:'info', msg:'You un-subscribed from ' + oa});
@@ -59,9 +59,9 @@ app.controller("SubscriptionController", function($scope,$http,$timeout,$q) {
   }
 
   
-  $scope.subscribeLeader = function(oa){
+  $scope.subscribeLeader = function(oa, button_id){
 
-  	submit(oa, function() {
+  	submit(oa, button_id, function() {
 		$http.post("api/unit/" + uid + "/subscription/" + oa + "?type=L").success(function(subscriptions){		
 			  	$scope.processing = "";
 				$scope.alerts.push({type:'success', msg:'You subscribed a leader to ' + oa});
@@ -78,9 +78,9 @@ app.controller("SubscriptionController", function($scope,$http,$timeout,$q) {
 
   }
 
-  $scope.unsubscribeLeader = function(oa){
+  $scope.unsubscribeLeader = function(oa, button_id){
 
-	submit(oa, function() {
+	submit(oa, button_id, function() {
 		$http.delete("api/unit/" + uid + "/subscription/" + oa + "?type=L").success(function(subscriptions){
 			$scope.processing = "";
 			$scope.alerts.push({type:'info', msg:'You un-subscribed a leader from ' + oa});

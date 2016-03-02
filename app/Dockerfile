@@ -1,11 +1,14 @@
 FROM node:argon
 MAINTAINER christoph@armstrongconsulting.net
 
-RUN mkdir -p /usr/src/app
+VOLUME /usr/src/app
+
 WORKDIR /usr/src/app
 
 COPY src/package.json /usr/src/app/
 RUN npm install
+
+RUN npm install nodemon -g
 
 COPY src /usr/src/app
 EXPOSE 8080

@@ -35,7 +35,7 @@ app.use('/pinakarri', express.static(__dirname + '/public'));
 
 app.get('/pinakarri/tickets', function (req, res) {
   var data = [['ticket_id', 'date', 'activity', 'type', 'booked_by']];
-
+  
   db.collection('tickets').find().toArray(function(err,all_tickets){
     all_tickets.forEach(function(ticket){
       if (ticket.booked_by){
@@ -199,14 +199,7 @@ mongo.connect(mongo_url, function(err, database) {
   app.listen(PORT);
   console.log('Running on http://localhost:' + PORT);
 
-  db.collection('units').find().toArray(function(err,units){
-      units.forEach(function(unit){
-        console.log(unit.identifier + ": http://localhost:8080/pinakarri?uid=" + unit.uid);
-      })
-  });
-
 });
-
 
 
 

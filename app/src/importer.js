@@ -67,6 +67,13 @@ module.exports = {
 	 	}
 	}).then(function () {
   		console.log("Import finished");
+
+      db.collection('units').find().toArray(function(err,units){
+          units.forEach(function(unit){
+            console.log(unit.identifier + ": http://localhost:8080/pinakarri?uid=" + unit.uid);
+          })
+      });
+
 	}, function (err) {
   		console.error(err.stack);
 	});

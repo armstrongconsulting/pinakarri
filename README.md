@@ -42,11 +42,11 @@ Open a terminal, switch to the pinakarri folder an run
 vagrant up
 ````
 
-This now gives you a virtual machine (or 'box' as the vagrant community would say), based on unbuntu trusty, whichich has docker installed on it. The following services will be running
+This now gives you a virtual machine (or 'box' as the vagrant community would say), based on ubuntu trusty, which has Docker installed on it. The following services will be running
 
 * MongoDb, you can point your browser at http://192.168.100.100:9001 which hosts an admin app for mongo
 * The application at http://192.168.100.100:9000/pinakarri
-* Open a debugger session by opening a window in chrome and point your chrome-browser at http://192.168.100.100:8888/?port=5858
+* Open a debugger session by pointing your chrome-browser at http://192.168.100.100:8888/?port=5858
 
 ####What else can you do
 

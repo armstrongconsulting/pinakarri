@@ -35,8 +35,7 @@ var findUnit = function(req, res, callback){
 app.use('/pinakarri', express.static(__dirname + '/public'));
 
 app.get('/pinakarri/tickets', function (req, res) {
-  var data = [['ticket_id', 'date', 'activity', 'type', 'booked_by']];
-  
+  var data = [['ticket_id', 'date', 'activity', 'type', 'booked_by']];  
   db.collection('tickets').find().toArray(function(err,all_tickets){
     all_tickets.forEach(function(ticket){
       if (ticket.booked_by){
@@ -48,9 +47,6 @@ app.get('/pinakarri/tickets', function (req, res) {
   });
 
 });
-
-
-
 
 app.get('/pinakarri/api/unit/:uid', function (req, res) {
     

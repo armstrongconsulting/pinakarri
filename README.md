@@ -1,6 +1,6 @@
 # Pinakarri - RaRo Offsite Activities
 
-[Pinakarri](http://www.pinakarri.at) is an international scout camp held in Augist 2016 in Austria, Laxenburg.
+[Pinakarri](http://www.pinakarri.at) is an international scout camp held in August 2016 in Austria, Laxenburg.
 
 This application implements the online-booking system for activities which scouts of the age of 16-20 years (so-called "Ranger and Rovers") can participate.
 

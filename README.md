@@ -16,7 +16,7 @@ There are a certain number of activities, which have a limited set of seats for 
 
 * [Vagrant](http://www.vagrantup.com) for providing a sealed development environment
 * [Docker](http://www.docker.com) for running the services the application
-* [Express](http://expressjs.com), a server side web framework based on [NodeJs](http://nodejs.org/) for serving the application and providing the backing services via REST apis
+* [Express](http://expressjs.com), a server side web framework based on [NodeJs](http://nodejs.org/) for serving the application and providing the back-end services via REST apis
 * [AngularJS](http://angularjs.org) for the client-side web-framework
 * [MongoDB] (http://mongodb.org), a NOSQL database
 

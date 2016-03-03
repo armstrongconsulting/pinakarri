@@ -1,18 +1,10 @@
 pinakarri-app:
+
   volumes:
     - /vagrant/app/src:/usr/src/app
- 
-  #The -L option is required for changes made by vagrant's host operating system 
-  #should trigger nodemon to restart the server
-  #see https://github.com/remy/nodemon/issues/419	  
-  command: [ "nodemon", "-L", "--debug", "server.js", "mongodb://db:27017/pinakarri" ]
 
-pinakarri-debug:
-  container_name: pinakarri_debug
-  build: debug
   ports:
-    - 8888:8080
+    - 8888:8888
 
-  links:
-   - pinakarri-app
-
+  environment:
+   - DEBUG=1

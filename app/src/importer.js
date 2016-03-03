@@ -5,7 +5,6 @@ var co = require('co');
 module.exports = {
   import_xls: function (db) {
  
-
     var data = xls.parse("source_data/data.xlsx");
 	  var units = [];
     var activities = [];

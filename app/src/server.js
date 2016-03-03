@@ -21,6 +21,7 @@ const app = express();
 var db;
 
 var findUnit = function(req, res, callback){
+  
   db.collection('units').findOne({uid:req.params.uid},function(err,unit){
       if (unit != null){
         callback(unit);

@@ -10,7 +10,7 @@ There are a certain number of activities, which have a limited set of seats for 
 
 * Only a limited number of scouts of the same group may book the same activity
 * Only one leader of a scout group may book the same activity.
-* The system will be opened at a given time, tickets for an activity are booked using first-come-first-serve. Once an activity is booked out it must no longer be able to book it.
+* The system will be opened at a given time, tickets for an activity are booked on a first-come, first-served basis. Once an activity is booked out it must no longer be able to book it.
 
 ##Technology stack
 

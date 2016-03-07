@@ -10,7 +10,7 @@ There are a certain number of activities, which have a limited set of seats for 
 
 * Only a limited number of scouts of the same group may book the same activity
 * Only one leader of a scout group may book the same activity.
-* The system will be opened at a given time, tickets for an activity are booked on a first-come, first-served basis. Once an activity is booked out it must no longer be able to book it.
+* The system will be opened at a given time, tickets for an activity are booked on a first-come, first-served basis. Once an activity is booked it must no longer be possible to book it a second time.
 
 ##Technology stack
 
@@ -21,7 +21,7 @@ There are a certain number of activities, which have a limited set of seats for 
 * [MongoDB] (http://mongodb.org), a NOSQL database
 
 
-##Installing a development environemnt
+##Installing a development environment
 
 ###Install vagrant
 * Follow the installation instructions at https://www.vagrantup.com/downloads.html for the operating system of your choice

@@ -36,7 +36,7 @@ git clone https://github.com/armstrongconsulting/pinakarri.git
 ```
 
 ###Boot up vagrant
-Open a terminal, switch to the pinakarri folder an run
+Open a terminal, switch to the pinakarri folder and run
 
 ```
 vagrant up
@@ -50,7 +50,7 @@ This now gives you a virtual machine (or 'box' as the vagrant community would sa
 
 ####What else can you do
 
-* run ```vargrant ssh``` to ssh into your pinakarri-development vm (box)
+* run ```vagrant ssh``` to ssh into your pinakarri-development vm (box)
 * There run ```docker ps``` to list all docker containers which are running
 * Run ```docker logs pinakarri_app``` to check the logs of the application, you'll find something like 
 

@@ -64,7 +64,10 @@
 	           <div ng-show="unit.completed.leaders < 100 || unit.completed.participants < 100" class="container">
 	              <p>In order to book an activity, click the "Book" button. It will then turn green. This indicates that you have booked a seat. If there is no button available, then there are no remaining seats. You can book up to 3 RaRo and up to 1 leader for the same activity.</p>
 	      	   </div>
-	
+
+	      	   <div class="container">
+	      	   	<p>To download a <b>description of all available activities</b>, please follow this <a href="https://www.dropbox.com/s/7mxx627o1axt6cs/Offsite%20Activity%20Descriptions.pdf" target="offiste_activities"><b>link</b></a>. This points to our dropbox. If you do not have a drop-box account you can safely ignore the pop up which asks you to sign-up with dropbox. You do not need a dropbox account to download the document!</p>
+	      	   </div>
 	      </div>
 	
 	   	</div>
@@ -79,12 +82,11 @@
 		       <div class="table-responsive"> 
 			       <table class="table table-hover">
 				       <thead>
-				       <tr><th>Id</th><th>Name</th><th>Ranger / Rovers</th><th>Leaders</th></tr>
+				       <tr><th>Activity</th><th>Ranger / Rovers</th><th>Leaders</th></tr>
 				       </thead>
 			     	   <tbody ng-repeat="activity in subscriptions"> 
 					      <tr> 
-						       <td>{{ activity.identifier }}</td> 
-						       <td><a href="{{activity.external_link}}" target="{{activity.identifier}}">{{ activity.name}}</a></td>
+						       <td><b>{{ activity.identifier }}</b><br/>{{activity.name}}</td> 
 						       <td>
 						         <div><p><b>{{ activity.participants.available}}</b> seat(s) available</p><p><b>{{ activity.participants.booked}}</b> seat(s) booked by you</p></div>
 						         <hr/>

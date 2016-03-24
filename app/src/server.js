@@ -115,7 +115,7 @@ app.post('/pinakarri/api/unit/:uid/subscription/:oa', function (req, res) {
         var type = req.query.type
 
         if (read_only){
-          res.status(400).send('Sorry, still in read-only mode. You\'ll be able to book your ticket starting with April 16th, 19:00 CET');   
+          res.status(400).send('Sorry, still in read-only mode. You\'ll be able to book your ticket starting with April 16th, 19:00 UTC+1');   
           return;
         }
 

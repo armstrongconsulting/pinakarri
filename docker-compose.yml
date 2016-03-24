@@ -18,7 +18,22 @@ pinakarri-app:
 
   restart: always
 
- 
+pinakarri-app-read-only:
+  container_name: pinakarri_app_read_only
+  build: app
+
+  ports:
+  - 9002:8080
+
+  links:
+   - mongo:db
+
+  restart: always
+
+  environment:
+    - READ_ONLY=1
+
+
 mongo-express:
   container_name: pinakarri_admin
   image: knickers/mongo-express:0.30.11

@@ -12,6 +12,15 @@ var mongo_url = "mongodb://localhost:27017/pinakarri"
 if (process.argv.length >= 3 && process.argv[2].startsWith('mongodb://'))
   mongo_url = process.argv[2];
 
+if (process.argv.length >= 3 && process.argv[2].startsWith('mongodb://'))
+  mongo_url = process.argv[2];
+
+var read_only = false;
+if (process.env.READ_ONLY == "1"){
+    console.log("Running in READ_ONLY mode")
+    read_only = true
+}
+
 // Constants
 const PORT = 8080;
 
@@ -104,6 +113,11 @@ app.post('/pinakarri/api/unit/:uid/subscription/:oa', function (req, res) {
         var uid = req.params.uid
         var oa = req.params.oa
         var type = req.query.type
+
+        if (read_only){
+          res.status(400).send('Sorry, still in read-only mode. You\'ll be able to book your ticket starting with April 16th, 19:00 CET');   
+          return;
+        }
 
         findUnit(req,res, function(unit){
           db.collection("locks").insertOne({createdAt: new Date(), key: unit.identifier}, {w:1}, function(err,lock){

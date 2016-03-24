@@ -84,11 +84,11 @@ var fetch_subscriptions = function(req, res, callback){
               
               activities.forEach(function (activity){
                 activity.participants = { 
-                  available: tickets.select("type == 'P' && activity == '"+ activity.identifier + "' && booked_by == null").length, 
+                  available: read_only ? 0 : tickets.select("type == 'P' && activity == '"+ activity.identifier + "' && booked_by == null").length, 
                   booked : tickets.select("type == 'P' && activity == '"+ activity.identifier + "' && booked_by == '" + unit.identifier + "'").length 
                 };
                 activity.leaders = { 
-                  available: tickets.select("type == 'L' && activity == '"+ activity.identifier + "' && booked_by == null").length, 
+                  available: read_only ? 0 : tickets.select("type == 'L' && activity == '"+ activity.identifier + "' && booked_by == null").length, 
                   booked : tickets.select("type == 'L' && activity == '"+ activity.identifier + "' && booked_by == '" + unit.identifier + "'").length 
                 };
 

@@ -86,7 +86,7 @@
 				       </thead>
 			     	   <tbody ng-repeat="activity in subscriptions"> 
 					      <tr> 
-						       <td><b>{{ activity.identifier }}</b><br/>{{activity.name}}</td> 
+						       <td><b>{{ activity.identifier }}</b><br/><span class="activity-description hidden-xs">{{activity.name}}</span></td>
 						       <td>
 						         <div><p><b>{{ activity.participants.available}}</b> seat(s) available</p><p><b>{{ activity.participants.booked}}</b> seat(s) booked by you</p></div>
 						         <hr/>

@@ -2,3 +2,9 @@
 .book-button {
   width: 100px;
 }
+
+.activity-description{
+   display:block;
+   width:150px;
+   word-wrap:break-word;
+}
